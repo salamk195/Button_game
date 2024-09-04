@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Catch the Button</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+        #gameArea {
+            position: relative;
+            width: 80vw;
+            height: 50vh;
+            border: 2px solid #3258d4;
+            border-radius: 12px;
+            background: #28a745;
+        }
+        #clickButton, #startButton {
+            position: absolute;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 4vw;
+        }
+        #clickButton { display: none; }
+        #score, #timer { margin: 5px 0; font-size: 4vw; }
+    </style>
+</head>
+<body>
+    <h1>Catch the Button</h1>
+    <div id="gameArea">
+        <button id="clickButton">Click Me!</button>
+    </div>
+    <div id="score">Score: 0</div>
+    <div id="timer">Time Left: 10s</div>
+    <button id="startButton">Start Game</button>
+
+    <script>
+        const clickButton = document.getElementById('clickButton');
+        const startButton = document.getElementById('startButton');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        let score = 0, timeLeft = 10, gameInterval, timerInterval;
+
+        startButton.addEventListener('click', () => {
+            score = 0; timeLeft = 10;
+            scoreDisplay.textContent = `Score: ${score}`;
+            timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+            startButton.style.display = 'none';
+            clickButton.style.display = 'block';
+            moveButton();
+            clickButton.onclick = () => scoreDisplay.textContent = `Score: ${++score}`;
+            gameInterval = setInterval(moveButton, 500);
+            timerInterval = setInterval(() => {
+                timerDisplay.textContent = `Time Left: ${--timeLeft}s`;
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+        });
+
+        function moveButton() {
+            clickButton.style.top = `${Math.random() * 90}%`;
+            clickButton.style.left = `${Math.random() * 80}%`;
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            clearInterval(timerInterval);
+            clickButton.style.display = 'none';
+            startButton.style.display = 'block';
+            alert(`Time's up! Your final score is: ${score}`);
+        }
+    </script>
+</body>
+</html>
